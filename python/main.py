@@ -94,6 +94,11 @@ supported_weapon = False
 recognized_weapon = False
 
 print_banner("double", "header-start", "user-options")
+print(
+    "INFO: This Python version is CLI-only (no GUI window).\n"
+    "      Toggle recoil: Delete | Exit: /\n"
+    "      Hold Left Alt for keyboard-mouse mode (Arrow keys move, PageUp/PageDown click)."
+)
 
 # LISTENER: Keyboard & Mouse Input
 try:

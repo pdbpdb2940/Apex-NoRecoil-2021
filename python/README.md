@@ -11,6 +11,20 @@ A CLI based tool written in Python that helps to control recoil as much as possi
 3. Update **line 12** in **main.py** with the dir to where you installed the **tesseract.exe**
 4. You should now be able to run the program in your venv using command - `py main.py`
 
+### GUIが出ない場合
+
+この `python/main.py` は **GUI非搭載のCLI版** です。起動してもウィンドウは表示されず、ターミナル上で動作します。  
+GUIが必要な場合は `AHK/src/gui.ahk` のAutoHotkey版を使用してください。
+
+### 起動後の基本操作（CLI版）
+
+* `Delete` : リコイル制御 ON/OFF
+* `/` : 終了
+* `1` / `2` : 武器スロット読み取り
+* `Left Alt` 長押し : キーボードマウスモード
+  * `↑↓←→` : マウス移動
+  * `PageUp` / `PageDown` : 左クリック押下 / 離上
+
 ## PATTERN-TRACKER TOOL
 
 **Note** - The tool can be found in the *modules* dir as *pattern_tracker.py*
