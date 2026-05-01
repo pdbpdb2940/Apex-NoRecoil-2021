@@ -27,6 +27,8 @@ except FileNotFoundError:
         sys.exit(0)
 
 toggle_button = "delete"
+keyboard_mouse_hold_key = "left alt"
+keyboard_mouse_step = 8
 
 def weapon_screenshot(select_weapon):
     if select_weapon == "one":
@@ -70,6 +72,20 @@ def left_click_state():
     left_click = win32api.GetKeyState(0x01)
     return left_click < 0
 
+def keyboard_mouse_mode():
+    if keyboard.is_pressed("up"):
+        MouseMoveTo(0, -keyboard_mouse_step)
+    if keyboard.is_pressed("down"):
+        MouseMoveTo(0, keyboard_mouse_step)
+    if keyboard.is_pressed("left"):
+        MouseMoveTo(-keyboard_mouse_step, 0)
+    if keyboard.is_pressed("right"):
+        MouseMoveTo(keyboard_mouse_step, 0)
+    if keyboard.is_pressed("page up"):
+        win32api.mouse_event(0x0002, 0, 0, 0, 0)
+    if keyboard.is_pressed("page down"):
+        win32api.mouse_event(0x0004, 0, 0, 0, 0)
+
 active_state = False
 last_toggle_state = False
 active_weapon_slot = 1
@@ -78,6 +94,11 @@ supported_weapon = False
 recognized_weapon = False
 
 print_banner("double", "header-start", "user-options")
+print(
+    "INFO: This Python version is CLI-only (no GUI window).\n"
+    "      Toggle recoil: Delete | Exit: /\n"
+    "      Hold Left Alt for keyboard-mouse mode (Arrow keys move, PageUp/PageDown click)."
+)
 
 # LISTENER: Keyboard & Mouse Input
 try:
@@ -117,12 +138,21 @@ try:
             try:
                 for i in range(len(recoil_patterns[active_weapon])):
                     if left_click_state():
+                        if keyboard.is_pressed(keyboard_mouse_hold_key):
+                            keyboard_mouse_mode()
                         MouseMoveTo(int(recoil_patterns[active_weapon][i][0]/data["modifier_value"]), int(recoil_patterns[active_weapon][i][1]/data["modifier_value"]))
                         time.sleep(recoil_patterns[active_weapon][i][2])
                 supported_weapon = True
             except KeyError:
                 supported_weapon = False
                 continue
+        elif active_state:
+            # Keep the mouse in a neutral/zero movement state while enabled.
+            MouseMoveTo(0, 0)
+
+        # OPTION: Hold key for temporary keyboard-to-mouse control mode.
+        if keyboard.is_pressed(keyboard_mouse_hold_key):
+            keyboard_mouse_mode()
         
         # OPTION: Kill Program
         if keyboard.is_pressed("/"):
